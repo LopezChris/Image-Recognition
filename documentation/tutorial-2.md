@@ -121,7 +121,7 @@ python -m scripts.retrain \
 	--image_dir=/tmp/tf_files/elephant_photos
 ~~~
 
-### Classify Flower in Image
+### Classify Elephant Species in Image
 
 ### Option 1: Classify Borneo Elephant in Image
 
