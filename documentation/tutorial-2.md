@@ -27,11 +27,12 @@ You will explore setting up a development environment with TensorFlow, use the D
 Open your terminal, linux shell or windows ubuntu shell. Run the command to download the docker **tensorflow** image:
 
 ~~~bash
+cd ~/Downloads
 git clone https://github.com/james94/tensorflow.git
 ~~~
 
 ~~~bash
-cd ~/github_repos/james-repos/tensorflow/tensorflow/tools/dockerfiles
+cd ~/Downloads/tensorflow/tensorflow/tools/dockerfiles
 ~~~
 
 ~~~bash
