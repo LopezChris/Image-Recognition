@@ -2,11 +2,20 @@
 title: Application Development Concepts
 ---
 
-### Bottlenecks
+# Application Development Concepts
 
-ImageNet doesn’t include flower species we’re training on here. The kinds of info that make it possible for ImageNet to differentiate among 1000 classes are useful for distinguishing other objects. By using this pre-trained network, we are using that information as input to final or last classification layer that distinguishes our flower classes.
+## Introduction
 
-Bottleneck is a term in deep learning that signifies the layer prior to the final layer that does the classification. Calculating the layers behind the bottleneck for each image takes a significant amount of time. Since these lower layers of the network aren’t being modified their outputs can be cached and reused. So, the script runs the constant part of the network, everything below the node labeled Bottleneck above and caching the results.
+
+
+## Outline
+
+- Model Retraining in Deep Learning
+- MobileNet
+- Object Recognition
+- Bottlenecks to the Model Improving in Object Recognition
+
+## Model Retraining in Deep Learning
 
 ### Training and Tensorboard
 
@@ -21,3 +30,15 @@ As the script trains, you’ll see a series of step outputs, each showing traini
 - **Cross entropy**: is a loss function that gives a glimpse into how well the learning process is progressing (lower numbers are better).
 
 Show graph of training vs validation accuracy. If the training accuracy orange continues to increase while the validation accuracy decreases, the model is overfitting.
+
+## MobileNet
+
+## Object Recognition
+
+## Bottlenecks to the Model Improving in Object Recognition
+
+### Bottlenecks
+
+ImageNet doesn’t include flower species we’re training on here. The kinds of info that make it possible for ImageNet to differentiate among 1000 classes are useful for distinguishing other objects. By using this pre-trained network, we are using that information as input to final or last classification layer that distinguishes our flower classes.
+
+Bottleneck is a term in deep learning that signifies the layer prior to the final layer that does the classification. Calculating the layers behind the bottleneck for each image takes a significant amount of time. Since these lower layers of the network aren’t being modified their outputs can be cached and reused. So, the script runs the constant part of the network, everything below the node labeled Bottleneck above and caching the results.
