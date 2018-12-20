@@ -25,18 +25,17 @@ You will learn to run TensorFlow on a single machine and train a simple classifi
 
 ### Goals and Objectives
 
-- Ability to use Python and Tensorflow to train an image classifier
+- Ability to use Python and Tensorflow to retrain an image classifier
 - Ability to classify images with your trained classifier
 
 ### Prerequisites
 
 - Basic understanding of Linux commands
 - Installed Docker on your local host machine
-- Installed git on Ubuntu Docker
-- Installed wget on Ubuntu Docker
+- Installed Virtual Machine Software
 
 ## Outline
 
 1\. **Application Development Concepts**: You will be introduced to image recognition and model retraining fundamentals.
 
-2\. **Performing Image Recognition**: You will setup the development environment to perform image recognition with TensorFlow on custom images of elephant species.
+2\. **Retraining Models for Object Recognition**: You will setup the development environment with TensorFlow, then learn to retrain the model for object recognition. This process can be used for classification of elephant species, flowers, etc.
