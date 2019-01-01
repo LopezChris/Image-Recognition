@@ -42,11 +42,21 @@ You will setup the development environment with TensorFlow. You will learn to re
 
 ## Model Retraining in Deep Learning
 
+### Overview of Transfer Learning
+
+**Transfer learning** is a technique for shortcutting having to tune the millions of parameters from modern image recognition models, a lot of labeled training data and computing power (hundreds of GPU hours). The process involves using a pre-trained image classifier and training a new classification layer for the final layer of that model.
+
+### Creating a Set of Training Images
+
+For each category, gather at least 100 photos of each object you want to recognize, but the more you gather the better the accuracy of your model. Then try to gather pictures in as wide a variety of situations, at different times with different devices to avoid the learning process picking up on anything the labeled images have in common. Split the big categories covering a lot of different physical forms into smaller ones that are more visually distinct. Check to make sure your images are labeled correctly
+
+### Training on Your Own Categories
+
+Your convolutional neural network will need a set of images, so you can teach it a new category you want it to recognize, such as flower species, elephant species, etc. Point the script (**retrain.py**, which you’ll download) to a folder of a category. The script loads a pre-trained module and trains a new classifier for the final layer using your new category. Even though your new category was probably not in the original **ImageNet** database of images used to train the network, transfer learning allows the lower layers of the network to be reused for your specific recognition tasks.
+
 ### Bottlenecks
 
-ImageNet doesn’t include flower species we’re training on here. The kinds of info that make it possible for ImageNet to differentiate among 1000 classes are useful for distinguishing other objects. By using this pre-trained network, we are using that information as input to final or last classification layer that distinguishes our flower classes.
-
-Bottleneck is a term in deep learning that signifies the layer prior to the final layer that does the classification. Calculating the layers behind the bottleneck for each image takes a significant amount of time. Since these lower layers of the network aren’t being modified their outputs can be cached and reused. So, the script runs the constant part of the network, everything below the node labeled Bottleneck above and caching the results.
+The **retrain.py** script can take 30+ minutes depending on speed of your machine. There are two phases: phase one analyzes all images on disk and calculates and caches the bottleneck values for each image. Bottleneck is a tensorflow term known as the layer just before the final output layer, which does the classification. This penultimate layer has been trained to output a set of values good enough for the classifier to distinguish between all image categories it’s been asked to recognize. The second phase includes retraining our final layer on new categories because the kind of information needed to distinguish the ImageNet categories is also useful for distinguishing new categories. By caching the bottleneck values, if the script is rerun, they’ll be reused, so you won’t have to wait on the significant amount time it takes to recalculate them.
 
 ### Training
 
@@ -62,9 +72,11 @@ As the script trains, you’ll see a series of step outputs, each showing traini
 
 Show graph of training vs validation accuracy. If the training accuracy orange continues to increase while the validation accuracy decreases, the model is **overfitting**.
 
-The model **overfitting** will occur if the training accuracy continues to increase while the validation accuracy decreases. **Tensorboard** is a graphing software that shows a visual of the training vs validation as the model is being retrained.
+The model **overfitting** will occur if the training accuracy continues to increase while the validation accuracy decreases.
 
-## MobileNet
+### Testing
+
+Once all steps are outputted, a **final test accuracy evaluation** will be printed showing an estimate of how the trained model will perform the classification task. You will see a percentage for the model’s prediction accuracy based on the images in the test that are given the correct label after the model is fully trained.
 
 ## Object Recognition
 
