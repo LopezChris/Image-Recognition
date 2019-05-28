@@ -2,19 +2,15 @@
 
 ## Introduction
 
-You will setup the development environment with TensorFlow. You will learn to retrain a model to perform object recognition on elephant species that appear in images. You will provide your model with a random elephant species and see how well it performs predicting the percentage that it thinks the image is a particular elephant species.
-
-- Ability to use Python and Tensorflow to retrain an image classifier
-- Ability to classify images with your trained classifier
+This simple tutorial showcases model transfer learning executed on CDSW. You will learn to retrain a model to perform object recognition on elephant species that appear in images. You will provide your model with a random elephant species and see how well it performs predicting the percentage that it thinks the image is a particular elephant species.
 
 ## Outline
 
-- Concepts
-- Setup Development Environment
-- Retrain the Model for Object Recognition
-- Test the Retrained Model on Classifying Elephants
-- Summary
-- Further Reading
+- [Concepts](#concepts)
+- [Retrain the Model for Object Recognition](#model-retraining-in-deep-learning)
+- [Test the Retrained Model on Classifying Elephants](#test-the-retrained-model-on-classifying-elephants)
+- [Summary](#summary)
+- [Further Reading](#further-reading)
 - Appendix: Classify Flower in Image
 
 ## Concepts
@@ -31,11 +27,11 @@ For each category, gather at least 100 photos of each object you want to recogni
 
 ### Training on Your Own Categories
 
-Your convolutional neural network will need a set of images, so you can teach it a new category you want it to recognize, such as flower species, elephant species, etc. Point the script (**retrain.py**, which you’ll download) to a folder of a category. The script loads a pre-trained module and trains a new classifier for the final layer using your new category. Even though your new category was probably not in the original **ImageNet** database of images used to train the network, transfer learning allows the lower layers of the network to be reused for your specific recognition tasks.
+Your convolutional neural network will need a set of images, so you can teach it a new category you want it to recognize, such as flower species, elephant species, etc. Point the script provided in this tutorial to a folder of a category i.e. if you wish to classify cats vs. dogs separate examples of cats in one folder and dogs on a separate folder. The script loads a pre-trained module and trains a new classifier for the final layer using your new category. Even though your new category was probably not in the original **ImageNet** database of images used to train the network, transfer learning allows the lower layers of the network to be reused for your specific recognition tasks.
 
 ### Bottlenecks
 
-The **retrain.py** script can take 30+ minutes depending on speed of your machine. There are two phases: phase one analyzes all images on disk and calculates and caches the bottleneck values for each image. Bottleneck is a tensorflow term known as the layer just before the final output layer, which does the classification. This penultimate layer has been trained to output a set of values good enough for the classifier to distinguish between all image categories it’s been asked to recognize. The second phase includes retraining our final layer on new categories because the kind of information needed to distinguish the ImageNet categories is also useful for distinguishing new categories. By caching the bottleneck values, if the script is rerun, they’ll be reused, so you won’t have to wait on the significant amount time it takes to recalculate them.
+The **`retrain.py`** script can take 30+ minutes depending on speed of your machine. There are two phases: phase one analyzes all images on disk and calculates and caches the bottleneck values for each image. Bottleneck is a tensorflow term known as the layer just before the final output layer, which does the classification. This penultimate layer has been trained to output a set of values good enough for the classifier to distinguish between all image categories it’s been asked to recognize. The second phase includes retraining our final layer on new categories because the kind of information needed to distinguish the ImageNet categories is also useful for distinguishing new categories. By caching the bottleneck values, if the script is rerun, they’ll be reused, so you won’t have to wait on the significant amount time it takes to recalculate them.
 
 ### Training
 
@@ -59,11 +55,7 @@ Once all steps are outputted, a **final test accuracy evaluation** will be print
 
 ## Object Recognition
 
-Jump to **Clone TensorFlow for Poets Application** section.
-
-### Option 2: Install TensorFlow in Virtual Machine
-
-On a virtual machine running linux, run the command to install the latest **tensorflow**:
+Install the latest **tensorflow**:
 
 ~~~bash
 pip install--upgrade "tensorflow>=1.7.*"
@@ -73,14 +65,6 @@ pip install tensorflow-hub
 ### Setup the Rest of the Environment
 
 ~~~bash
-# Clone TensorFlow for Poets Application
-git clone https://github.com/googlecodelabs/tensorflow-for-poets-2
-cd tensorflow-for-poets-2
-# Download the Training Images
-curl -LO http://download.tensorflow.org/example_images/flower_photos.tgz
-# Extract flower photos to tf_files dir
-tar -xf flower_photos.tgz -C tf_files
-ls tf_files/flower_photos
 ### Configure MobileNet Convolutional Neural Network
 IMAGE_SIZE=224
 ARCHITECTURE="mobilenet_0.50_${IMAGE_SIZE}"
