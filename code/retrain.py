@@ -222,6 +222,7 @@ def get_image_path(image_lists, label_name, index, image_dir, category):
   Returns:
     File system path string to an image that meets the requested parameters.
   """
+  print('get_image_path')
   if label_name not in image_lists:
     tf.logging.fatal('Label does not exist %s.', label_name)
   label_lists = image_lists[label_name]
@@ -240,6 +241,7 @@ def get_image_path(image_lists, label_name, index, image_dir, category):
 
 def get_bottleneck_path(image_lists, label_name, index, bottleneck_dir,
                         category, module_name):
+  print('get_bottleneck_path')
   """Returns a path to a bottleneck file for a label at the given index.
   Args:
     image_lists: OrderedDict of training images for each label.
@@ -261,6 +263,7 @@ def get_bottleneck_path(image_lists, label_name, index, bottleneck_dir,
 
 
 def create_module_graph(module_spec):
+  print('create_module_graph')
   """Creates a graph and loads Hub Module into it.
   Args:
     module_spec: the hub.ModuleSpec for the image module being used.
@@ -284,6 +287,7 @@ def create_module_graph(module_spec):
 def run_bottleneck_on_image(sess, image_data, image_data_tensor,
                             decoded_image_tensor, resized_input_tensor,
                             bottleneck_tensor):
+  print('run_bottleneck_on_image')
   """Runs inference on an image to extract the 'bottleneck' summary layer.
   Args:
     sess: Current active TensorFlow Session.
@@ -306,6 +310,7 @@ def run_bottleneck_on_image(sess, image_data, image_data_tensor,
 
 
 def ensure_dir_exists(dir_name):
+  print('ensure_dir_exists')
   """Makes sure the folder exists on disk.
   Args:
     dir_name: Path string to the folder we want to create.
@@ -318,6 +323,7 @@ def create_bottleneck_file(bottleneck_path, image_lists, label_name, index,
                            image_dir, category, sess, jpeg_data_tensor,
                            decoded_image_tensor, resized_input_tensor,
                            bottleneck_tensor):
+  print(create_bottleneck_file)
   """Create a single bottleneck file."""
   tf.logging.debug('Creating bottleneck at ' + bottleneck_path)
   image_path = get_image_path(image_lists, label_name, index,
@@ -341,6 +347,7 @@ def get_or_create_bottleneck(sess, image_lists, label_name, index, image_dir,
                              category, bottleneck_dir, jpeg_data_tensor,
                              decoded_image_tensor, resized_input_tensor,
                              bottleneck_tensor, module_name):
+  print('get_or_create_bottleneck')
   """Retrieves or calculates bottleneck values for an image.
   If a cached version of the bottleneck data exists on-disk, return that,
   otherwise calculate the data and save it to disk for future use.
@@ -398,6 +405,7 @@ def get_or_create_bottleneck(sess, image_lists, label_name, index, image_dir,
 def cache_bottlenecks(sess, image_lists, image_dir, bottleneck_dir,
                       jpeg_data_tensor, decoded_image_tensor,
                       resized_input_tensor, bottleneck_tensor, module_name):
+  print('cache_bottlenecks')
   """Ensures all the training, testing, and validation bottlenecks are cached.
   Because we're likely to read the same image multiple times (if there are no
   distortions applied during training) it can speed things up a lot if we
@@ -440,6 +448,7 @@ def get_random_cached_bottlenecks(sess, image_lists, how_many, category,
                                   bottleneck_dir, image_dir, jpeg_data_tensor,
                                   decoded_image_tensor, resized_input_tensor,
                                   bottleneck_tensor, module_name):
+  print('get_random_cached_bottlenecks')
   """Retrieves bottleneck values for cached images.
   If no distortions are being applied, this function can retrieve the cached
   bottleneck values directly from disk for images. It picks a random set of
@@ -649,6 +658,7 @@ def add_input_distortions(flip_left_right, random_crop, random_scale,
 
 
 def variable_summaries(var):
+  print('variable_summaries')
   """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
   with tf.name_scope('summaries'):
     mean = tf.reduce_mean(var)
@@ -919,16 +929,14 @@ def logging_level_verbosity(logging_verbosity):
                        (str(e), list(name_to_level)))
 
 
-def main(_):
+def main(argv):
   # Needed to make sure the logging output is visible.
   # See https://github.com/tensorflow/tensorflow/issues/3047
-  logging_verbosity = logging_level_verbosity(FLAGS.logging_verbosity)
-  tf.logging.set_verbosity(logging_verbosity)
-
+  """
   if not FLAGS.image_dir:
     tf.logging.error('Must set flag --image_dir.')
     return -1
-
+  """
   # Prepare necessary directories that can be used during training
   prepare_file_system()
 
@@ -1094,6 +1102,7 @@ def main(_):
 
 
 if __name__ == '__main__':
+  print('main')
   parser = argparse.ArgumentParser()
   parser.add_argument(
       '--image_dir',
@@ -1265,11 +1274,7 @@ if __name__ == '__main__':
       type=str,
       default='',
       help='Where to save the exported graph.')
-  parser.add_argument(
-      '--logging_verbosity',
-      type=str,
-      default='INFO',
-      choices=['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'],
-      help='How much logging output should be produced.')
-  FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+  
+  main(sys.argv[1:])
+  #FLAGS, unparsed = parser.parse_known_args()
+  #tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
