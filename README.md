@@ -57,17 +57,19 @@ Once all steps are outputted, a **final test accuracy evaluation** will be print
 
 ### Setup the Rest of the Environment
 
-Install the latest **tensorflow**:
+First open the workbench and start a new **Python3** session
+
+![new-session](assets/images/new-session.jpg)
+
+Install the latest **tensorflow** and **tensorflow-hub** then clone the Tensorflow for poets repository:
+
+![clone-repo](assets/images/clone-repo.jpg)
 
 ~~~bash
-pip install--upgrade "tensorflow>=1.7.*"
-pip install tensorflow-hub
-~~~
-
-~~~bash
-### Configure MobileNet Convolutional Neural Network
-IMAGE_SIZE=224
-ARCHITECTURE="mobilenet_0.50_${IMAGE_SIZE}"
+!pip3 install --upgrade "tensorflow==1.7.*"
+!pip3 install tensorflow-hub
+!git clone https://github.com/googlecodelabs/tensorflow-for-poets-2
+!cd tensorflow-for-poets-2
 ~~~
 
 ## Retrain the Model for Object Recognition
@@ -86,15 +88,14 @@ Run the following command to train the model using the **elephant_photos**
 directory:
 
 ~~~bash
-!python3 /home/cdsw/code/retrain.py \
-	--bottleneck_dir=tf_files/bottlenecks \
-	--how_many_training_steps=500 \
-	--model_dir=tf_files/models/ \
-	--summaries_dir=tf_files/training_summaries/"${ARCHITECTURE}" \
-	--output_graph=tf_files/retrained_graph.pb \
-	--output_labels=tf_files/retrained_labels.txt \
-	--architecture="${ARCHITECTURE}" \
-	--image_dir=/home/cdsw/assets/data-set/
+!python3 -m scripts.retrain \
+  --bottleneck_dir=tf_files/bottlenecks \
+  --model_dir=tf_files/models/mobilenet_0.50_224 \
+  --summaries_dir=tf_files/training_summaries/mobilenet_0.50_224 \
+  --output_graph=tf_files/retrained_graph.pb \
+  --output_labels=tf_files/retrained_labels.txt \
+  --architecture=mobilenet_0.50_224 \
+  --image_dir=./../assets/data-set/
 ~~~
 
 Output after training the final layer:
@@ -132,27 +133,14 @@ The image we are going to pass to the model is an **African Bush Elephant**:
 Let's see how well the model predicts the species of the above elephant:
 
 ~~~bash
-python -m scripts.label_image \
+!python3 -m scripts.label_image \
 	--graph=tf_files/retrained_graph.pb \
-	--image=/tmp/tf_files/elephant_photos/african_bush_elephant/africa-african-bush-elephant-african-elephant-71309.jpg
+	--image=./../assets/data-set//african_bush_elephant/africa-african-bush-elephant-african-elephant-71309.jpg
 ~~~
-
-<!-- For clarity, I changed the name of africa-african-bush-elephant-african-elephant-71309.jpg to african-bush-elephant.jpg -->
 
 Output example:
 
-~~~bash
-2018-12-20 17:11:20.397323: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2018-12-20 17:11:20.459256: W tensorflow/core/framework/allocator.cc:122] Allocation of 65233920 exceeds 10% of system memory.
-
-Evaluation time (1-image): 0.128s
-
-african bush elephant (score=0.69358)
-borneo elephant (score=0.30448)
-indian elephant (score=0.00185)
-sumatran elephant (score=0.00006)
-african forest elephant (score=0.00004)
-~~~
+![bush-elephant](assets/images/bush-elephant.jpg)
 
 We can see the model thinks there is a 69.3% possibility that the image is of an **African Bush Elephant**.
 
@@ -165,26 +153,16 @@ The image we are going to pass to the model is an **African Forest Elephant**:
 Let's see how well the model predicts the species of the above elephant:
 
 ~~~bash
-python -m scripts.label_image \
+!python3 -m scripts.label_image \
 	--graph=tf_files/retrained_graph.pb \
-	--image=/tmp/tf_files/elephant_photos/african_forest_elephant/7-african-forest-elephant-tony-camacho.jpg
+	--image=./../assets/data-set/african_forest_elephant/7-african-forest-elephant-tony-camacho.jpg
 ~~~
 
 <!-- For clarity, I changed the name of 7-african-forest-elephant-tony-camacho.jpg to african-forest-elephant.jpg -->
 
 Output example:
 
-~~~bash
-2018-12-20 17:08:08.144847: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.128s
-
-african forest elephant (score=1.00000)
-sumatran elephant (score=0.00000)
-borneo elephant (score=0.00000)
-indian elephant (score=0.00000)
-african bush elephant (score=0.00000)
-~~~
+![forest-elephant](assets/images/bush-elephant.jpg)
 
 We can see the model thinks there is a 100% possibility that the image is of an **African Forest Elephant**.
 
@@ -197,26 +175,14 @@ The image we are going to pass to the model is an **Borneo Elephant**:
 Let's see how well the model predicts the species of the above elephant:
 
 ~~~bash
-python -m scripts.label_image \
+!python3 -m scripts.label_image \
 	--graph=tf_files/retrained_graph.pb \
-	--image=/tmp/tf_files/elephant_photos/borneo_elephant/Borneo-elephant-by-Mike-Prince-1024x768.jpg
+	--image=./../assets/data-set/borneo_elephant/Borneo-elephant-by-Mike-Prince-1024x768.jpg
 ~~~
-
-<!-- For clarity, I changed the name of Borneo-elephant-by-Mike-Prince-1024x768.jpg to borneo-elephant.jpg -->
 
 Output example:
 
-~~~bash
-2018-12-20 17:03:04.737146: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.130s
-
-sumatran elephant (score=0.94462)
-borneo elephant (score=0.03253)
-african forest elephant (score=0.02083)
-indian elephant (score=0.00202)
-african bush elephant (score=0.00000)
-~~~
+![borneo](assets/images/borneo-inf.jpg)
 
 We can see the model thinks there is a 94.4% possibility that the image is of an **Sumatran Elephant**, but the model predicted wrong because the picture is of an **Borneo Elephant**.
 
@@ -229,26 +195,16 @@ The image we are going to pass to the model is an **Indian Elephant**:
 Let's see how well the model predicts the species of the above elephant:
 
 ~~~bash
-python -m scripts.label_image \
+!python3 -m scripts.label_image \
 	--graph=tf_files/retrained_graph.pb \
-	--image=/tmp/tf_files/elephant_photos/indian_elephant/5038805076_d33dbbd3dd_b.jpg
+	--image=./../assets/data-set/indian_elephant/5038805076_d33dbbd3dd_b.jpg
 ~~~
 
 <!-- For clarity, I changed the name of 5038805076_d33dbbd3dd_b.jpg to indian-elephant.jpg -->
 
 Output example:
 
-~~~bash
-2018-12-20 16:54:23.657256: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.136s
-
-sumatran elephant (score=0.99997)
-indian elephant (score=0.00002)
-borneo elephant (score=0.00001)
-african forest elephant (score=0.00000)
-african bush elephant (score=0.00000)
-~~~
+![indian-elephant](assets/images/indian-elephant2.jpg)
 
 We can see the model thinks there is a 99.9% possibility that the image is of an **Sumatran Elephant**, but the model predicted wrong because the picture is of an **Indian Elephant**.
 
@@ -261,26 +217,14 @@ The image we are going to pass to the model is an **Sumatran Elephant**:
 Let's see how well the model predicts the species of the above elephant:
 
 ~~~bash
-python -m scripts.label_image \
+!python3 -m scripts.label_image \
 	--graph=tf_files/retrained_graph.pb \
-	--image=/tmp/tf_files/elephant_photos/sumatran_elephant/Photo-1-cropped.jpg
+	--image=./../assets/data-set/sumatran_elephant/Photo-1-cropped.jpg
 ~~~
-
-<!-- For clarity, I changed the name of Photo-1-cropped.jpg to sumatran-elephant.jpg -->
 
 Output example:
 
-~~~bash
-2018-12-20 16:48:35.487994: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.129s
-
-sumatran elephant (score=0.99998)
-african forest elephant (score=0.00001)
-african bush elephant (score=0.00000)
-indian elephant (score=0.00000)
-borneo elephant (score=0.00000)
-~~~
+![sumatran](assets/images/sumatran.jpg)
 
 We can see the model thinks there is a 99.9% possibility that the image is of an **Sumatran Elephant**.
 
@@ -292,99 +236,3 @@ Congratulations! You now know how to deploy tensorflow, retrain a MobileNet mode
 
 - [How to Retrain an Image Classifier for New Categories](https://www.tensorflow.org/hub/tutorials/image_retraining)
 - [TensorFlow For Poets](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets/#0)
-
-## Appendix: Classify Flower in Image
-
-### Train Final Layer with Flower Photos
-
-Train the final layer of ImageNet model using flower_photos.
-
-~~~bash
-python -m scripts.retrain \
-	--bottleneck_dir=tf_files/bottlenecks \
-	--how_many_training_steps=500 \
-	--model_dir=tf_files/models/ \
-	--summaries_dir=tf_files/training_summaries/"${ARCHITECTURE}" \
-	--output_graph=tf_files/retrained_graph.pb \
-	--output_labels=tf_files/retrained_labels.txt \
-	--architecture="${ARCHITECTURE}" \
-	--image_dir=tf_files/flower_photos
-~~~
-
-Output after training the final layer:
-
-~~~bash
-INFO:tensorflow:2018-12-15 00:18:09.412453: Step 0: Train accuracy = 68.0%
-INFO:tensorflow:2018-12-15 00:18:09.412679: Step 0: Cross entropy = 0.880066
-INFO:tensorflow:2018-12-15 00:18:09.570666: Step 0: Validation accuracy = 61.0% (N=100)
-INFO:tensorflow:2018-12-15 00:18:09.856491: Step 10: Train accuracy = 69.0%
-INFO:tensorflow:2018-12-15 00:18:09.856694: Step 10: Cross entropy = 1.098178
-INFO:tensorflow:2018-12-15 00:18:09.884023: Step 10: Validation accuracy = 64.0% (N=100)
-
-...
-
-INFO:tensorflow:2018-12-15 00:18:25.294948: Step 499: Train accuracy = 96.0%
-INFO:tensorflow:2018-12-15 00:18:25.295227: Step 499: Cross entropy = 0.130251
-INFO:tensorflow:2018-12-15 00:18:25.322254: Step 499: Validation accuracy = 88.0% (N=100)
-INFO:tensorflow:Final test accuracy = 91.4% (N=362)
-INFO:tensorflow:Froze 2 variables.
-INFO:tensorflow:Converted 2 variables to const ops.
-~~~
-
-We can see the Final test accuracy, which is the model's prediction accuracy on images of random flowers is 91.4%.
-
-### Classify Daisy in Image
-
-The image we are going to pass to the model is a **daisy**.
-
-Let's see how well the model predicts the flower type:
-
-~~~bash
-python  -m scripts.label_image \
-	--graph=tf_files/retrained_graph.pb \
-	--image=tf_files/flower_photos/daisy/21652746_cc379e0eea_m.jpg
-~~~
-
-Output example:
-
-~~~bash
-2018-12-20 17:18:36.164373: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.132s
-
-daisy (score=0.98156)
-dandelion (score=0.01527)
-sunflowers (score=0.00306)
-roses (score=0.00011)
-tulips (score=0.00000)
-~~~
-
-We can see the model thinks there is a 98.1% possibility that the image is of a **daisy**.
-
-### Classify Rose in Image
-
-The image we are going to pass to the model is a **rose**.
-
-Let's see how well the model predicts the flower type:
-
-~~~bash
-python -m scripts.label_image \
-	--graph=tf_files/retrained_graph.pb \
-	--image=tf_files/flower_photos/roses/2414954629_3708a1a04d.jpg
-~~~
-
-Output example:
-
-~~~bash
-2018-12-20 17:19:46.838240: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-
-Evaluation time (1-image): 0.131s
-
-roses (score=0.91378)
-tulips (score=0.08614)
-dandelion (score=0.00006)
-sunflowers (score=0.00001)
-daisy (score=0.00000)
-~~~
-
-We can see the model thinks there is a 91.3% possibility that the image is of a **daisy**.
